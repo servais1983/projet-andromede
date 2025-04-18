@@ -42,7 +42,7 @@ Nous avons con\u00e7u nos syst\u00e8mes d'IA pour fonctionner principalement en 
 **Configuration minimale**:
 - OS: Windows 10/11, macOS 11+, Ubuntu 20.04+, Android 10+, iOS 14+
 - CPU: Double c\u0153ur @ 2 GHz
-- RAM: a4 Go
+- RAM: 4 Go
 - Espace disque: 1 Go
 - Connexion Internet pour mises \u00e0 jour et partage d'intelligence
 
