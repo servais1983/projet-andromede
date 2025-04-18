@@ -1,13 +1,14 @@
-# Projet Andromede
+# Projet Androm\u00e8de
 
-![QYqwi7o2MXbbw1NPdTOUn](https://github.com/user-attachments/assets/930b1730-8974-45a6-b950-449042fc0e3d)
+<p align=\"center\">
+  <img src=\"https://raw.githubusercontent.com/servais1983/projet-andromede/main/docs/assets/logo-placeholder.png\" alt=\"Logo Projet Androm\u00e8de\" width=\"200\"/>
+</p>
 
-
-> **Antivirus Next-Gen inspiré par la défense de la chaîne d'Andromède**
+> **Antivirus Next-Gen inspir\u00e9 par la d\u00e9fense de la cha\u00eene d'Androm\u00e8de**
 
 ## \ud83c\udf0c Vision
 
-Inspir\u00e9 par la structure r\u00e9siliente et interconnect\u00e9e de la galaxie d'Androm\u00e8de, ce logiciel combine une **architecture d\u00e9centralis\u00e9e**, une **IA pr\u00e9dictive/g\u00e9n\u00e9rative**, et une **approche collaborative** pour red\u00e9finir la cybers\u00e9curit\u00e9.
+Inspir\u00e9 par la structure r\u00e9siliente et interconnect\u00e9e de la galaxie d'Androm\u00e8de, ce logiciel combine une **architecture d\u00e9centralis\u00e9e**, une **IA pr\u00e9dictive et g\u00e9n\u00e9rative**, et une **approche collaborative** pour red\u00e9finir la cybers\u00e9curit\u00e9.
 
 ## \ud83d\udccb Sommaire
 
