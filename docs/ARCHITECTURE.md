@@ -51,7 +51,7 @@ Mod\u00e8le Transformer entra\u00een\u00e9 pour pr\u00e9dire les vuln\u00e9rabil
 
 ### Gaia Generator
 
-IA g\u00e9n\u00e9rative cr\u00e9ant des d\u00e9fenses proactives.
+IA g\u00e9n\u00e9rative qui cr\u00e9e des d\u00e9fenses proactives.
 
 - **Leurres dynamiques** personnalis\u00e9s pour chaque environnement
 - **Faux fichiers sensibles** attirant et pi\u00e9geant les ransomwares
