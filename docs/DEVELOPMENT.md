@@ -105,37 +105,3 @@ python -m pytest tests/
 3. Soumettre une Pull Request vers `develop`
 4. Attendre la revue de code et l'approbation
 5. Les d\u00e9ploiements en production sont faits \u00e0 partir de `main`
-
-## \ud83d\udcda Ressources de D\u00e9veloppement
-
-### Documentation des APIs Internes
-
-- API Blockchain: [docs/api/blockchain.md]()
-- API Threat Intelligence: [docs/api/threat_intel.md]()
-- API Neural Sandbox: [docs/api/sandbox.md]()
-
-### Guides Techniques
-
-- [Configuration du n\u0153ud de d\u00e9veloppement]()
-- [Entra\u00eenement des mod\u00e8les IA]()
-- [D\u00e9ploiement en environnement de test]()
-
-## \ud83d\udd2e Roadmap Technique
-
-### Phase 1: Fondations
-
-- [ ] Impl\u00e9mentation de la blockchain l\u00e9g\u00e8re
-- [ ] Setup de l'infrastructure de sandboxing
-- [ ] Mod\u00e8le de base pour Pegasus Predict
-
-### Phase 2: Int\u00e9grations & Tests
-
-- [ ] API compl\u00e8te pour int\u00e9grations tierces
-- [ ] Interface utilisateur StarMap (version web)
-- [ ] Tests de performance et de s\u00e9curit\u00e9
-
-### Phase 3: Finalisation & Optimisation
-
-- [ ] Impl\u00e9mentation de Gaia Generator
-- [ ] Optimisation pour appareils \u00e0 ressources limit\u00e9es
-- [ ] Documentation compl\u00e8te pour les d\u00e9veloppeurs tiers
