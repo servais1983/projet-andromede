@@ -1,8 +1,7 @@
 # Projet Andromède
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/servais1983/projet-andromede/main/docs/assets/logo-placeholder.png" alt="Logo Projet Andromède" width="200"/>
-</p>
+![QYqwi7o2MXbbw1NPdTOUn](https://github.com/user-attachments/assets/c5d74005-b6ed-421e-992b-a744a44ec109)
+
 
 > **Antivirus Next-Gen inspiré par la défense de la galaxie d'Andromède**
 
