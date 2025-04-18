@@ -11,7 +11,7 @@ Le Projet Androm\u00e8de est une solution de s\u00e9curit\u00e9 nouvelle g\u00e9
 Contrairement aux antivirus traditionnels qui reposent principalement sur des signatures statiques et des mises \u00e0 jour centralis\u00e9es, Projet Androm\u00e8de:
 
 - Utilise un r\u00e9seau d\u00e9centralis\u00e9 pour partager les menaces en temps r\u00e9el
-- Emploie l'IA g\u00e9n\u00e9rative pour cr\u00e9er des d\u00e9fenses proactives
+- Exploite l'IA g\u00e9n\u00e9rative pour cr\u00e9er des d\u00e9fenses proactives
 - Offre une micro-segmentation pour limiter la propagation des menaces
 - Analyse les comportements plut\u00f4t que de simples signatures
 - Visualise les menaces en 3D pour une compr\u00e9hension intuitive
@@ -33,7 +33,7 @@ Seules les signatures anonymis\u00e9es des menaces sont partag\u00e9es sur le r\
 
 ### Comment l'IA prot\u00e8ge-t-elle ma vie priv\u00e9e?
 
-Nous avons con\u00e7u nos syst\u00e8mes d'IA pour fonctionner principalement en local, limitant les donn\u00e9es envoy\u00e9es au cloud. L'IA est entra\u00een\u00e9e sur des ensembles de donn\u00e9es anonymis\u00e9s et utilise des techniques de \"federated learning\" pour s'am\u00e9liorer sans partager vos donn\u00e9es personnelles. Par d\u00e9faut, seules les m\u00e9triques agrg\u00e9es et les signatures de menaces sont partag\u00e9es.
+Nous avons con\u00e7u nos syst\u00e8mes d'IA pour fonctionner principalement en local, limitant les donn\u00e9es envoy\u00e9es au cloud. L'IA est entra\u00een\u00e9e sur des ensembles de donn\u00e9es anonymis\u00e9s et utilise des techniques de \"federated learning\" pour s'am\u00e9liorer sans partager vos donn\u00e9es personnelles. Par d\u00e9faut, seules les m\u00e9triques agr\u00e9g\u00e9es et les signatures de menaces sont partag\u00e9es.
 
 ## \ud83d\udcbb Tech & Installation
 
@@ -42,7 +42,7 @@ Nous avons con\u00e7u nos syst\u00e8mes d'IA pour fonctionner principalement en 
 **Configuration minimale**:
 - OS: Windows 10/11, macOS 11+, Ubuntu 20.04+, Android 10+, iOS 14+
 - CPU: Double c\u0153ur @ 2 GHz
-- RAM: 4 Go
+- RAM: a4 Go
 - Espace disque: 1 Go
 - Connexion Internet pour mises \u00e0 jour et partage d'intelligence
 
