@@ -1,0 +1,111 @@
+# Exemple de configuration pour Projet Androm\u00e8de
+# ================================================
+# ATTENTION: Ce fichier est un exemple. Ne stockez pas d'informations sensibles ici.
+# Copiez ce fichier vers quantum_encryption.yaml et personnalisez-le.
+
+# Configuration g\u00e9n\u00e9rale
+# -------------------------
+general:
+  environment: development     # development, testing, production
+  log_level: info              # debug, info, warning, error, critical
+  telemetry_enabled: true      # Partage anonyme des statistiques d'utilisation
+  auto_update: true            # Mises \u00e0 jour automatiques
+
+# Param\u00e8tres r\u00e9seau et blockchain
+# ---------------------------------
+network:
+  # Param\u00e8tres du n\u0153ud d\u00e9centralis\u00e9
+  node:
+    p2p_port: 9050             # Port pour communications P2P
+    bootstrap_nodes:            # N\u0153uds initiaux pour rejoindre le r\u00e9seau
+      - node1.andromede.example.org:9050
+      - node2.andromede.example.org:9050
+    max_connections: 50        # Nombre maximal de connexions simultan\u00e9es
+    node_type: full            # full, light, validator
+    decoy_nodes_enabled: true  # Activation des n\u0153uds fant\u00f4mes
+  
+  # Param\u00e8tres de synchronisation
+  sync:
+    interval: 300              # Intervalle de synchronisation en secondes
+    prioritize_threats: true   # Prioriser les menaces les plus critiques
+    max_bandwidth: 5000        # Limite de bande passante (KB/s)
+
+# Cryptographie
+# -------------
+encryption:
+  # Algorithmes post-quantiques
+  algorithm: Kyber-1024        # Kyber-512, Kyber-768, Kyber-1024
+  key_exchange: NTRUPrime      # NTRUPrime, SIDH
+  signature: SPHINCS+          # SPHINCS+, XMSS
+  hash: SHA3-256               # SHA3-256, SHA3-512
+  
+  # Rotation des cl\u00e9s
+  key_rotation:
+    enabled: true              # Activation de la rotation automatique
+    interval_days: 90          # Fr\u00e9quence de rotation
+
+# Intelligence Artificielle
+# -------------------------
+ai:
+  # Mod\u00e8les d'IA
+  models:
+    threat_detection: "pegasus_v1.pth"   # Mod\u00e8le de d\u00e9tection
+    decoy_generator: "gaia_v1.pth"       # G\u00e9n\u00e9rateur de leurres
+  
+  # Param\u00e8tres du sandbox
+  sandbox:
+    timeout: 30                # Timeout d'analyse en secondes
+    max_memory: 1024           # Limite de m\u00e9moire en MB
+    gpu_acceleration: auto     # auto, enabled, disabled
+  
+  # Param\u00e8tres d'apprentissage
+  learning:
+    federated: true            # Apprentissage f\u00e9d\u00e9r\u00e9
+    local_updates: true        # Mises \u00e0 jour locales du mod\u00e8le
+    anonymization_level: high  # Niveau d'anonymisation des donn\u00e9es
+
+# Bouclier de protection
+# ---------------------
+shield:
+  # Micro-segmentation
+  microsegmentation:
+    enabled: true              # Activation de la micro-segmentation
+    default_policy: strict     # strict, balanced, permissive
+    auto_learning: true        # Apprentissage automatique des r\u00e8gles
+  
+  # Syst\u00e8me d'auto-r\u00e9paration
+  self_healing:
+    enabled: true              # Activation de l'auto-r\u00e9paration
+    patch_level: recommended   # Niveau d'application des correctifs
+    rollback_enabled: true     # Retour arri\u00e8re en cas d'\u00e9chec
+
+# Interface utilisateur
+# --------------------
+ui:
+  # StarMap Visualizer
+  starmap:
+    rendering_mode: 3D         # 3D, 2D, hybrid
+    theme: dark                # dark, light, system
+    refresh_rate: 5            # Taux de rafra\u00eechissement en secondes
+  
+  # Astra Assistant
+  astra:
+    voice_enabled: true        # Activation de l'assistant vocal
+    language: auto             # auto, fr, en, es, etc.
+    suggestion_level: medium   # Niveau de suggestions: low, medium, high
+
+# Int\u00e9grations
+# ------------
+integrations:
+  # SIEM/SOAR
+  siem:
+    enabled: false             # Activation de l'int\u00e9gration SIEM
+    format: CEF                # Format des logs: CEF, LEEF, JSON
+    endpoint: ""                # URL du SIEM
+  
+  # API externe
+  api:
+    enabled: true              # Activation de l'API
+    port: 5000                 # Port d'\u00e9coute
+    token_expiration: 3600     # Dur\u00e9e de validit\u00e9 des tokens en secondes
+    rate_limit: 100            # Limite de requ\u00eates par minute
