@@ -1,0 +1,89 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Project specific
+chain-data/
+models/
+results/
+samples/
+.env
+config/quantum_encryption.yaml
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Database
+*.sqlite3
+*.db
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Test
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Distribution / packaging
+*.tar.gz
+*.zip
+*.gz
+*.rar
+
+# Documentation
+docs/_build/
+
+# TensorFlow / PyTorch
+checkpoints/
+tensorboard/
+*.pt
+*.pth
+*.h5
+*.ckpt
+
+# Credentials (NEVER COMMIT THESE)
+*.pem
+*.key
+*.crt
+*_rsa
+*.p12
