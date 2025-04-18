@@ -109,7 +109,7 @@
 **B\u00e9n\u00e9fices**:
 - Performances pr\u00e9serv\u00e9es pendant les sessions cr\u00e9atives
 - Prot\u00e8ge l'outil de travail et les revenus
-- S\u00e9curit\u00e9 en ligne renforc\u00e9e pour les personnalits publiques
+- S\u00e9curit\u00e9 en ligne renforc\u00e9e pour les personnalit\u00e9s publiques
 - Protection de la propri\u00e9t\u00e9 intellectuelle
 
 ## \ud83c\udf10 Cas Sp\u00e9cialis\u00e9s
@@ -134,7 +134,7 @@
 
 ### Protection des Environnements Industriels
 
-**Contexte**: Industrie manufacturire, \u00c9nergie, Utilities
+**Contexte**: Industrie manufacturi\u00e8re, \u00c9nergie, Utilities
 
 **Besoin**: S\u00e9curiser l'IT et l'OT avec contraintes op\u00e9rationnelles strictes.
 
@@ -149,3 +149,21 @@
 - Visibilit\u00e9 sur la convergence IT/OT
 - R\u00e9duction des risques cyber-physiques
 - Int\u00e9gration avec les syst\u00e8mes de contr\u00f4le industriels
+
+### Protection des Environnements Acad\u00e9miques
+
+**Contexte**: Universit\u00e9s, Centres de recherche
+
+**Besoin**: S\u00e9curiser un environnement ouvert avec donn\u00e9es sensibles.
+
+**Solution Androm\u00e8de**:
+- \u00c9quilibre entre accessibilit\u00e9 et s\u00e9curit\u00e9
+- Protection des donn\u00e9es de recherche
+- S\u00e9curisation d\u00e9centralis\u00e9e adapt\u00e9e aux structures distribu\u00e9es
+- Processus de validation adapt\u00e9s aux besoins acad\u00e9miques
+
+**B\u00e9n\u00e9fices**:
+- Maintient l'ouverture n\u00e9cessaire \u00e0 la recherche
+- Protection contre l'espionnage acad\u00e9mique
+- S\u00e9curisation des propri\u00e9t\u00e9s intellectuelles
+- Support pour environnements h\u00e9t\u00e9rog\u00e8nes
