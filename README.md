@@ -3,7 +3,7 @@
 ![QYqwi7o2MXbbw1NPdTOUn](https://github.com/user-attachments/assets/930b1730-8974-45a6-b950-449042fc0e3d)
 
 
-> **Antivirus Next-Gen inspir\u00e9 par la d\u00e9fense de la cha\u00eene d'Androm\u00e8de**
+> **Antivirus Next-Gen inspiré par la défense de la chaîne d'Andromède**
 
 ## \ud83c\udf0c Vision
 
