@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # Neural Sandbox - Environnement d'analyse isol\u00e9
+  neural-sandbox:
+    build:
+      context: ./docker/neural-sandbox
+      dockerfile: Dockerfile
+    container_name: andromede-sandbox
+    restart: unless-stopped
+    volumes:
+      - ./samples:/samples:ro
+      - ./results:/results
+    ports:
+      - "8080:8080"
+    environment:
+      - SANDBOX_MODE=development
+      - LOG_LEVEL=debug
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # Blockchain Node - N\u0153ud Andromeda Chain
+  blockchain-node:
+    build:
+      context: ./docker/blockchain
+      dockerfile: Dockerfile
+    container_name: andromede-blockchain
+    restart: unless-stopped
+    volumes:
+      - ./chain-data:/data
+    ports:
+      - "9050:9050"
+    environment:
+      - NODE_TYPE=validator
+      - CONSENSUS=pbft
+      - P2P_PORT=9050
+
+  # Orion Core - Syst\u00e8me d'IA central
+  orion-core:
+    build:
+      context: ./docker/orion-core
+      dockerfile: Dockerfile
+    container_name: andromede-orion
+    restart: unless-stopped
+    volumes:
+      - ./models:/models
+    ports:
+      - "5000:5000"
+    environment:
+      - MODEL_PATH=/models
+      - API_KEY=${ORION_API_KEY}
+    depends_on:
+      - neural-sandbox
+      - blockchain-node
+
+  # UI - Interface utilisateur StarMap
+  starmap-ui:
+    build:
+      context: ./docker/ui
+      dockerfile: Dockerfile
+    container_name: andromede-ui
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - API_ENDPOINT=http://orion-core:5000
+      - VISUALIZER_MODE=3D
+    depends_on:
+      - orion-core
+
+  # Base de donn\u00e9es de configurations et param\u00e8tres
+  config-db:
+    image: postgres:14
+    container_name: andromede-db
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=andromede_config
+    ports:
+      - "5432:5432"
+
+  # Service Redis pour cache et partage d'\u00e9tat
+  redis:
+    image: redis:alpine
+    container_name: andromede-cache
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres-data:
+  redis-data:
+  
+networks:
+  default:
+    name: andromede-network
