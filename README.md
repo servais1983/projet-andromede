@@ -55,6 +55,23 @@ Projet Andromède repose sur trois piliers fondamentaux :
 | Sandboxing       | QEMU/KVM, Docker                            |
 | UI/XR            | Unity MARS, OpenXR                          |
 
+🧩 Exemple concret :
+Imaginons que tu as 3 applications :
+
+Un site web
+
+Une base de données
+
+Une appli RH
+
+Avec la micro-segmentation :
+
+Le site web peut parler à la base de données, mais pas à l’appli RH.
+
+Si un pirate attaque le site web, il reste coincé dans cette "bulle".
+
+L’IA vérifie constamment que ces règles sont respectées et adapte les protections si besoin.
+
 ## 📓 Feuille de route
 
 Développement du MVP prévu en 18 mois :
