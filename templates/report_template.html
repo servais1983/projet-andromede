@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport d'analyse - Projet Andromède</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        /* Styles intégrés au cas où le fichier CSS ne serait pas accessible */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        h1 { color: #2c3e50; margin-bottom: 10px; font-weight: 700; }
+        .risk-level { font-weight: bold; padding: 5px 10px; border-radius: 4px; display: inline-block; }
+        .risk-critique { background-color: #e74c3c; color: white; }
+        .risk-élevé { background-color: #e67e22; color: white; }
+        .risk-moyen { background-color: #f39c12; color: white; }
+        .risk-faible { background-color: #3498db; color: white; }
+        .risk-informatif { background-color: #2ecc71; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #2c3e50; color: white; }
+        .severity { font-weight: bold; padding: 3px 8px; border-radius: 4px; display: inline-block; text-transform: capitalize; }
+        .severity-critical { background-color: #e74c3c; color: white; }
+        .severity-high { background-color: #e67e22; color: white; }
+        .severity-medium { background-color: #f39c12; color: white; }
+        .severity-low { background-color: #3498db; color: white; }
+        .severity-info { background-color: #2ecc71; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rapport d'analyse de sécurité - Projet Andromède</h1>
+            <p>Analyse de fichier CSV pour la détection de cybermenaces</p>
+        </header>
+        
+        <div class="summary">
+            <div class="summary-item">
+                <h3>Fichier analysé</h3>
+                <p>{{file_name}}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Date d'analyse</h3>
+                <p>{{scan_date}}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Score de risque</h3>
+                <p>{{total_score}}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Niveau de risque</h3>
+                <p class="risk-level risk-{{risk_level_class}}">{{risk_level}}</p>
+            </div>
+        </div>
+        
+        <div class="file-info">
+            <h2>Informations sur le fichier</h2>
+            <table>
+                <tr>
+                    <th>Chemin du fichier</th>
+                    <td>{{file_path}}</td>
+                </tr>
+                <tr>
+                    <th>Hash SHA-256</th>
+                    <td>{{file_hash}}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="results">
+            <h2>Résultats de l'analyse</h2>
+            
+            {% if not results %}
+            <p>Aucune menace détectée.</p>
+            {% else %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Règle</th>
+                        <th>Description</th>
+                        <th>Correspondance</th>
+                        <th>Emplacement</th>
+                        <th>Sévérité</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{result.rule_name}}</td>
+                        <td>{{result.description}}</td>
+                        <td><span class="match">{{result.match}}</span></td>
+                        <td>{{result.location}}</td>
+                        <td><span class="severity severity-{{result.severity}}">{{result.severity}}</span></td>
+                        <td>{{result.score}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        
+        <footer>
+            <p>Généré par Projet Andromède - Antivirus Next-Gen inspiré par la défense de la galaxie d'Andromède</p>
+            <p>© {{current_year}} Projet Andromède</p>
+        </footer>
+    </div>
+</body>
+</html>

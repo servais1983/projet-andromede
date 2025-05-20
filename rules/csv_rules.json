@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Détection BitLocker",
+        "description": "Détecte les mentions de BitLocker qui pourraient indiquer un chiffrement malveillant",
+        "pattern": "bitlocker",
+        "severity": "high",
+        "score": 70
+    },
+    {
+        "name": "Détection Ransomware",
+        "description": "Détecte les mentions de ransomware connus",
+        "pattern": "ransomware|wannacry|ryuk|lockbit|revil",
+        "severity": "critical",
+        "score": 90
+    },
+    {
+        "name": "Extensions suspectes",
+        "description": "Détecte les extensions de fichiers potentiellement malveillantes",
+        "pattern": "\\.exe|\\.dll|\\.bat|\\.ps1|\\.vbs|\\.js|\\.hta",
+        "severity": "medium",
+        "score": 50
+    },
+    {
+        "name": "Commandes PowerShell suspectes",
+        "description": "Détecte les commandes PowerShell potentiellement malveillantes",
+        "pattern": "invoke-expression|iex|invoke-webrequest|downloadstring|hidden|bypass|encodedcommand",
+        "severity": "high",
+        "score": 70
+    },
+    {
+        "name": "URLs suspectes",
+        "description": "Détecte les URLs potentiellement malveillantes",
+        "pattern": "http://|https://|ftp://|pastebin|github|raw|download",
+        "severity": "medium",
+        "score": 50
+    },
+    {
+        "name": "Détection de mots-clés liés aux malwares",
+        "description": "Détecte les mots-clés souvent associés aux logiciels malveillants",
+        "pattern": "malware|virus|trojan|backdoor|keylogger|spyware|rootkit",
+        "severity": "high",
+        "score": 70
+    },
+    {
+        "name": "Adresses IP suspectes",
+        "description": "Détecte les adresses IP qui pourraient être des serveurs de commande et contrôle",
+        "pattern": "\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b",
+        "severity": "medium",
+        "score": 50
+    },
+    {
+        "name": "Détection de scripts obfusqués",
+        "description": "Détecte les patterns d'obfuscation de code",
+        "pattern": "base64|frombase64string|convert|encoded|encrypt|decrypt|obfuscate",
+        "severity": "high",
+        "score": 70
+    },
+    {
+        "name": "Détection de persistance",
+        "description": "Détecte les mécanismes de persistance courants",
+        "pattern": "registry|regedit|hklm|hkcu|run|runonce|startup|autorun|task scheduler|scheduled task",
+        "severity": "medium",
+        "score": 50
+    },
+    {
+        "name": "Détection de techniques d'évasion",
+        "description": "Détecte les techniques d'évasion de détection",
+        "pattern": "sleep|timeout|delay|wait|evasion|bypass|antivirus|defender|sandbox",
+        "severity": "high",
+        "score": 70
+    }
+]

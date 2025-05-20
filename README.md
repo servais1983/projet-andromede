@@ -16,6 +16,7 @@ Inspiré par la structure résiliente et interconnectée de la galaxie d'Androm�
 - [Stack Technologique](#stack-technologique)
 - [Feuille de route](#feuille-de-route)
 - [Installation](#installation)
+- [Utilisation](#utilisation)
 - [Contribuer](#contribuer)
 - [Licence](#licence)
 
@@ -42,6 +43,10 @@ Projet Andromède repose sur trois piliers fondamentaux :
 
 ## 🌟 Fonctionnalités Clés
 
+- **Scanner CSV** : Analyse des fichiers CSV pour détecter des menaces potentielles
+- **Système de scoring** : Évaluation du niveau de risque des menaces détectées
+- **Règles YARA** : Détection avancée basée sur des patterns de menaces connus
+- **Rapports HTML** : Génération de rapports détaillés et lisibles
 - **StarMap Threat Visualizer** : Interface AR/VR cartographiant les menaces en 3D
 - **Voice Assistant "Astra"** : IA conversationnelle guidant les utilisateurs novices
 - **Quantum Ready** : Algorithmes post-quantiques intégrés pour une sécurité future
@@ -54,6 +59,8 @@ Projet Andromède repose sur trois piliers fondamentaux :
 | IA/ML            | PyTorch, TensorFlow Lite (edge computing)   |
 | Sandboxing       | QEMU/KVM, Docker                            |
 | UI/XR            | Unity MARS, OpenXR                          |
+| Scanner CSV      | Python, Flask                               |
+| Rapports         | HTML, CSS, JavaScript                       |
 
 🧩 Exemple concret :
 Imaginons que tu as 3 applications :
@@ -66,11 +73,11 @@ Une appli RH
 
 Avec la micro-segmentation :
 
-Le site web peut parler à la base de données, mais pas à l’appli RH.
+Le site web peut parler à la base de données, mais pas à l'appli RH.
 
 Si un pirate attaque le site web, il reste coincé dans cette "bulle".
 
-L’IA vérifie constamment que ces règles sont respectées et adapte les protections si besoin.
+L'IA vérifie constamment que ces règles sont respectées et adapte les protections si besoin.
 
 ## 📓 Feuille de route
 
@@ -82,9 +89,54 @@ Développement du MVP prévu en 18 mois :
 
 ## 📦 Installation
 
-*Instructions d'installation à venir avec la première release.*
+### Prérequis
+
+- Python 3.8 ou supérieur
+- Pip (gestionnaire de paquets Python)
+
+### Installation locale
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/servais1983/projet-andromede.git
+   cd projet-andromede
+   ```
+
+2. Installez les dépendances :
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Lancez l'application :
+   ```bash
+   python src/app.py
+   ```
+
+4. Accédez à l'interface web via votre navigateur :
+   ```
+   http://localhost:5000
+   ```
 
 Pour les développeurs souhaitant contribuer, veuillez consulter notre [guide d'installation](docs/INSTALLATION.md).
+
+## 🚀 Utilisation
+
+### Scanner un fichier CSV
+
+1. Accédez à l'interface web via votre navigateur
+2. Cliquez sur la zone de dépôt ou utilisez le bouton pour sélectionner un fichier CSV
+3. Cliquez sur "Analyser" pour lancer l'analyse
+4. Consultez le rapport détaillé des menaces détectées
+
+### Utilisation en ligne de commande
+
+Vous pouvez également utiliser le scanner en ligne de commande :
+
+```bash
+python src/main.py chemin/vers/fichier.csv
+```
+
+Le rapport HTML sera généré dans le même répertoire que le fichier analysé.
 
 ## 🤝 Contribuer
 
