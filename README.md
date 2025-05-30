@@ -1,6 +1,6 @@
 # Projet Andromède
 
-![QYqwi7o2MXbbw1NPdTOUn](https://github.com/user-attachments/assets/c5d74005-b6ed-421e-992b-a744a44ec109)
+![QYqwi7o2MXbbw1NPdTOUn](andromeda.png)
 
 
 > **Antivirus Next-Gen inspiré par la défense de la galaxie d'Andromède**
