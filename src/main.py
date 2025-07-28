@@ -13,6 +13,10 @@ import json
 import datetime
 import hashlib
 from pathlib import Path
+import pandas as pd
+
+# Ajouter le répertoire parent au path pour importer core
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Chemins relatifs pour les différents composants
 RULES_DIR = Path(__file__).parent.parent / "rules"
@@ -25,6 +29,25 @@ SCORE_HIGH = 70
 SCORE_MEDIUM = 50
 SCORE_LOW = 30
 SCORE_INFO = 10
+
+# Imports des nouveaux modules IA
+try:
+    from core.ai.orion_core import OrionCore
+    from core.ai.pegasus_predict import PegasusPredict
+    from core.ai.gaia_generator import GaiaGenerator
+    from core.ai.neural_sandbox import NeuralSandbox
+    from core.ai.astra_assistant import AstraAssistant
+    from core.blockchain.andromeda_chain import AndromedaChain
+    from core.shield.nebula_shield import NebulaShield
+    from core.quantum.quantum_shield import QuantumShield
+    from ui.starmap_visualizer import StarMapVisualizer
+    AI_MODULES_AVAILABLE = True
+    print("Modules IA avancés chargés avec succès!")
+except ImportError as e:
+    AI_MODULES_AVAILABLE = False
+    print(f"Modules IA non disponibles: {e}")
+    print("Installez les dépendances: pip install -r requirements.txt")
+
 
 class CSVScanner:
     """
@@ -565,38 +588,174 @@ class CSVScanner:
         return str(output_path)
 
 def main():
-    """Fonction principale pour l'exécution du scanner en ligne de commande."""
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <chemin_vers_fichier_csv>")
-        sys.exit(1)
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <fichier_csv>")
+        print("\n🌟 Projet Andromède - Scanner de Menaces Next-Gen")
+        print("📊 Analyse CSV avec IA, Blockchain et Visualisation 3D")
+        
+        if AI_MODULES_AVAILABLE:
+            print("\nModules IA disponibles:")
+            print("  - Orion Core: Analyse IA avec Phi-3")
+            print("  - Pegasus Predict: Prediction de vulnerabilites")
+            print("  - Gaia Generator: Generation de leurres")
+            print("  - Neural Sandbox: Analyse isolee")
+            print("  - Astra Assistant: IA conversationnelle")
+            print("  - Andromeda Chain: Blockchain de signatures")
+            print("  - Nebula Shield: Protection adaptative")
+            print("  - Quantum Shield: Chiffrement post-quantique")
+            print("  - StarMap Visualizer: Visualisation 3D")
+        else:
+            print("\nMode degrade: Fonctionnalites de base disponibles")
+            print("  - Scanner CSV: Fonctionnel")
+            print("  - Rapports HTML: Fonctionnel")
+            print("  - Detection de menaces: Fonctionnel (mode basique)")
+        
+        return
     
-    file_path = sys.argv[1]
+    fichier_csv = sys.argv[1]
     
-    if not os.path.exists(file_path):
-        print(f"Erreur: Le fichier {file_path} n'existe pas.")
-        sys.exit(1)
+    # Vérification de l'existence du fichier
+    if not os.path.exists(fichier_csv):
+        print(f"Erreur: Le fichier {fichier_csv} n'existe pas")
+        return 1
     
-    if not file_path.lower().endswith('.csv'):
-        print(f"Erreur: Le fichier {file_path} n'est pas un fichier CSV.")
-        sys.exit(1)
-    
-    scanner = CSVScanner()
-    print(f"Analyse du fichier {file_path}...")
-    
-    report = scanner.scan_file(file_path)
-    
-    print(f"\nRésultats de l'analyse:")
-    print(f"Niveau de risque: {report['risk_level']} (Score: {report['total_score']})")
-    print(f"Nombre de détections: {len(report['results'])}")
-    
-    if report['results']:
-        print("\nDétections:")
-        for i, result in enumerate(report['results'], 1):
-            print(f"{i}. {result['rule_name']} ({result['severity']}) - {result['match']} à {result['location']}")
-    
-    # Génération du rapport HTML
-    html_report = scanner.generate_html_report(report)
-    print(f"\nRapport HTML généré: {html_report}")
+    try:
+        # Initialisation du scanner de base (toujours disponible)
+        print("Initialisation du scanner Andromede...")
+        scanner = CSVScanner()
+        
+        # Initialisation du système IA (optionnel)
+        ai_system = None
+        blockchain = None
+        shield = None
+        quantum_shield = None
+        visualizer = None
+        
+        if AI_MODULES_AVAILABLE:
+            try:
+                print("Initialisation du systeme IA Andromede...")
+                
+                # Initialisation des modules IA en mode robuste
+                ai_system = OrionCore()
+                
+                # Les autres modules en mode optionnel
+                try:
+                    blockchain = AndromedaChain()
+                    print("  [OK] Blockchain Andromeda initialisee")
+                except Exception as e:
+                    print(f"  [WARN] Blockchain non disponible: {e}")
+                    blockchain = None
+                
+                try:
+                    shield = NebulaShield()
+                    print("  [OK] Nebula Shield initialise")
+                except Exception as e:
+                    print(f"  [WARN] Nebula Shield non disponible: {e}")
+                    shield = None
+                
+                try:
+                    quantum_shield = QuantumShield()
+                    print("  [OK] Quantum Shield initialise")
+                except Exception as e:
+                    print(f"  [WARN] Quantum Shield non disponible: {e}")
+                    quantum_shield = None
+                
+                try:
+                    visualizer = StarMapVisualizer()
+                    print("  [OK] StarMap Visualizer initialise")
+                except Exception as e:
+                    print(f"  [WARN] StarMap Visualizer non disponible: {e}")
+                    visualizer = None
+                
+                print("[SUCCESS] Systeme IA Andromede partiellement initialise!")
+                
+                # Démarrage des services disponibles
+                if blockchain:
+                    try:
+                        blockchain.start_mining()
+                    except:
+                        pass
+                
+                if shield:
+                    try:
+                        shield.create_security_bubble("andromede_scanner", [os.getpid()])
+                    except:
+                        pass
+                
+                if visualizer:
+                    try:
+                        visualizer.start_animation()
+                    except:
+                        pass
+                
+            except Exception as e:
+                print(f"[WARN] Erreur initialisation IA: {e}")
+                print("  Continuation en mode scanner de base...")
+                ai_system = None
+        
+        # Analyse du fichier CSV
+        print(f"\nAnalyse du fichier: {fichier_csv}")
+        print("   Detection des menaces en cours...")
+        
+        start_time = datetime.datetime.now()
+        
+        # Scan principal
+        results = scanner.scan_file(fichier_csv)
+        
+        # Analyse IA supplémentaire si disponible
+        if ai_system:
+            try:
+                print("   Analyse IA supplementaire...")
+                for result in results.get("results", []):
+                    if result.get("match"):
+                        ai_analysis = ai_system.analyze_threat(result["match"])
+                        result["ai_analysis"] = ai_analysis
+                        print(f"     IA: {ai_analysis.get('description', 'Analyse complétée')}")
+            except Exception as e:
+                print(f"   [WARN] Analyse IA echouee: {e}")
+        
+        # Génération du rapport HTML
+        try:
+            print("   [INFO] Generation du rapport HTML...")
+            html_report = scanner.generate_html_report(results)
+            print(f"   [SUCCESS] Rapport HTML cree: {html_report}")
+            results["report_file"] = html_report
+        except Exception as e:
+            print(f"   [ERROR] Erreur generation rapport: {e}")
+            results["report_file"] = "Erreur generation"
+        
+        end_time = datetime.datetime.now()
+        processing_time = (end_time - start_time).total_seconds()
+        
+        # Rapport final
+        print(f"\nAnalyse terminee en {processing_time:.2f} secondes")
+        print(f"   Menaces detectees: {len(results.get('results', []))}")
+        print(f"   Score total: {results.get('total_score', 0)}")
+        print(f"   Rapport: {results.get('report_file', 'Non genere')}")
+        
+        # Nettoyage des ressources
+        try:
+            if ai_system:
+                del ai_system
+            if blockchain:
+                del blockchain
+            if shield:
+                del shield
+            if quantum_shield:
+                del quantum_shield
+            if visualizer:
+                del visualizer
+        except:
+            pass
+        
+        return 0
+        
+    except Exception as e:
+        print(f"Erreur lors de l'analyse: {e}")
+        import traceback
+        print(f"   Détails: {traceback.format_exc()}")
+        return 1
 
 if __name__ == "__main__":
-    main()
+    exit_code = main()
+    sys.exit(exit_code)

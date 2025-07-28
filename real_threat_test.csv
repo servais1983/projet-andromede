@@ -1,0 +1,11 @@
+source,threat_type,payload,category,timestamp
+192.168.1.100,bruteforce,admin/password123,ssh_attack,2025-01-23 20:00:00
+trojan.exe,malware,C:\Windows\System32	rojan.exe,file_infection,2025-01-23 20:01:00
+phishing@fake-bank.com,phishing,Urgent: Verify your account,email_attack,2025-01-23 20:02:00
+10.0.0.1,portscan,nmap -sS -p1-65535,network_recon,2025-01-23 20:03:00
+javascript:alert(XSS),xss,alert(Hacked),web_attack,2025-01-23 20:04:00
+DROP TABLE users,sql_injection,malicious_input,database_attack,2025-01-23 20:05:00
+ransomware.exe,ransomware,Your files are encrypted,crypto_attack,2025-01-23 20:06:00
+botnet.c2.com,botnet,command_and_control,c2_communication,2025-01-23 20:07:00
+exploit.py,privilege_escalation,CVE-2024-1234,local_exploit,2025-01-23 20:08:00
+lateral.move,lateral_movement,SMB exploit via 445,network_attack,2025-01-23 20:09:00

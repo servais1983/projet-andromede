@@ -1,0 +1,11 @@
+source,threat_type,payload,category,timestamp
+192.168.1.100,bruteforce,admin/admin123,ssh_attack,2025-01-23 20:00:00
+malware.exe,trojan,C:\Windows\System32\,file_infection,2025-01-23 20:01:00
+phishing@fake-bank.com,credential_theft,login.html,email_attack,2025-01-23 20:02:00
+10.0.0.1,port_scan,nmap -sS -p1-65535,network_recon,2025-01-23 20:03:00
+javascript:alert('XSS'),xss,form_input,web_attack,2025-01-23 20:04:00
+'; DROP TABLE users; --,sql_injection,user_input,database_attack,2025-01-23 20:05:00
+ransomware_payload,crypto_locker,file.encrypted,ransomware,2025-01-23 20:06:00
+c2.botnet.com,command_control,tcp_443,botnet_activity,2025-01-23 20:07:00
+privilege_escalation,kernel_exploit,system_call,local_exploit,2025-01-23 20:08:00
+lateral_movement,smb_exploit,\\192.168.1.5\C$,persistence,2025-01-23 20:09:00
