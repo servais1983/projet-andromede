@@ -33,8 +33,8 @@ SCORE_INFO = 10
 # Imports des nouveaux modules IA
 try:
     from core.ai.orion_core import OrionCore
-    from core.ai.pegasus_predict import PegasusPredict
-    from core.ai.gaia_generator import GaiaGenerator
+    # PegasusPredict retiré — nécessite PyTorch (non disponible sans requirements-full.txt)
+    # GaiaGenerator retiré — nécessite PyTorch (non disponible sans requirements-full.txt)
     from core.ai.neural_sandbox import NeuralSandbox
     from core.ai.astra_assistant import AstraAssistant
     from core.blockchain.andromeda_chain import AndromedaChain

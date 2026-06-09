@@ -71,5 +71,47 @@
     "nonce": 1551,
     "difficulty": 3,
     "hash": "0005fd89853594261a5488646640592d814068b752a1d189c96cd21a26a1bdd6"
+  },
+  {
+    "index": 4,
+    "timestamp": "2026-06-09T11:56:46.207603",
+    "signatures": [
+      {
+        "sig_id": "bdd33a24f6c890e5",
+        "threat_type": "xss",
+        "sha256_hash": "bdd33a24f6c890e5364dfc500bf796f20eb3afe7b032109a8986587cca2c9957",
+        "pattern_hash": "414f727c13811bb5ff46ee4d2a5d72b6f77bcda1c6ed2187d5caa845681941fe",
+        "severity": "high",
+        "confidence": 0.95,
+        "source_node": "32201e3cb2bc45b8",
+        "timestamp": "2026-06-09T11:56:46.207416"
+      }
+    ],
+    "previous_hash": "0005fd89853594261a5488646640592d814068b752a1d189c96cd21a26a1bdd6",
+    "merkle_root": "7f422090cf0970d1e6986e4c5bbeb9f8709155e9ac9672b7dee370212661965d",
+    "nonce": 3075,
+    "difficulty": 3,
+    "hash": "000b6722d71dee17a0038472d304068e6338e5af7ee1ebd64059bedeb146cb83"
+  },
+  {
+    "index": 5,
+    "timestamp": "2026-06-09T11:57:35.680782",
+    "signatures": [
+      {
+        "sig_id": "bdd33a24f6c890e5",
+        "threat_type": "xss",
+        "sha256_hash": "bdd33a24f6c890e5364dfc500bf796f20eb3afe7b032109a8986587cca2c9957",
+        "pattern_hash": "414f727c13811bb5ff46ee4d2a5d72b6f77bcda1c6ed2187d5caa845681941fe",
+        "severity": "high",
+        "confidence": 0.95,
+        "source_node": "19143745cbe61412",
+        "timestamp": "2026-06-09T11:57:35.680611"
+      }
+    ],
+    "previous_hash": "000b6722d71dee17a0038472d304068e6338e5af7ee1ebd64059bedeb146cb83",
+    "merkle_root": "6b8e14abe017a882c88fc6becb1b399a45e8aca3198f8d48ec89785da5a3243d",
+    "nonce": 6045,
+    "difficulty": 3,
+    "hash": "00023457f65a00629540ef878c4915c0dad459598700f73ca3d6e1ae25343ffc"
   }
 ]

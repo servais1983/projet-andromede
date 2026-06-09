@@ -223,7 +223,17 @@ def create_app() -> Flask:
     @rate_limit(max_per_minute=30)
     def ai_analysis():
         if not astra:
-            return jsonify(success=False, error="AI assistant not available"), 503
+            return jsonify(success=False,
+                           error="Assistant IA non disponible. Installez requirements-full.txt (PyTorch requis)."), 503
+        # En mode dégradé (sans PyTorch) : réponses hardcodées = pas de l'IA réelle
+        if getattr(astra, "degraded_mode", True):
+            return jsonify(
+                success=False,
+                error="Assistant IA non disponible sans PyTorch. "
+                      "Installez: pip install -r requirements-full.txt",
+                hint="Les modules de sécurité (blockchain, quantum, sandbox, nebula) "
+                     "sont eux pleinement opérationnels via /api/*"
+            ), 503
         data = request.get_json(silent=True) or {}
         message = (data.get("message") or "").strip()
         if not message:

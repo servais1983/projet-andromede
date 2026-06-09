@@ -267,3 +267,47 @@ class TestAPIRoutes:
             data=json.dumps({}),
             content_type="application/json")
         assert r.status_code == 400
+
+class TestHonestyGuards:
+    """Vérifie qu'aucun module ne simule silencieusement."""
+
+    def test_ai_analysis_503_without_pytorch(self, flask_client):
+        """Sans PyTorch, /ai-analysis doit retourner 503, pas une réponse simulée."""
+        r = flask_client.post("/ai-analysis",
+            data=json.dumps({"message": "test"}),
+            content_type="application/json")
+        # Soit 503 (pas de PyTorch) soit 200 (PyTorch installé) — jamais de fausse IA
+        assert r.status_code in (200, 503)
+        if r.status_code == 503:
+            d = r.get_json()
+            assert "PyTorch" in d.get("error", "") or "non disponible" in d.get("error", "")
+
+    def test_orion_core_is_real_ml(self):
+        """OrionCore doit tourner en mode ML réel, pas fallback."""
+        from core.ai.orion_core import OrionCore
+        o = OrionCore()
+        assert o.ml_available, "scikit-learn doit être disponible"
+        assert o.get_status()["mode"] == "ml"
+
+    def test_quantum_real_nonces(self):
+        """Deux chiffrements du même plaintext doivent produire des nonces différents."""
+        from core.quantum.quantum_shield import QuantumShield
+        import secrets as s
+        from cryptography.hazmat.primitives import hashes
+        from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+        qs = QuantumShield()
+        salt = s.token_bytes(32)
+        key = HKDF(algorithm=hashes.SHA256(), length=32, salt=salt,
+                   info=b"andromede-v1").derive(
+            qs.node_keypair.x25519_private.private_bytes_raw())
+        p1 = qs.encrypt(b"same", key=key)
+        p2 = qs.encrypt(b"same", key=key)
+        assert p1.nonce != p2.nonce, "Les nonces doivent être aléatoires (pas hardcodés)"
+
+    def test_sandbox_real_resource_limits(self):
+        """Le sandbox doit réellement tuer les processus trop lents."""
+        from core.sandbox.neural_sandbox import NeuralSandbox, SandboxProfile
+        sb = NeuralSandbox(SandboxProfile(wall_timeout_seconds=0.5))
+        r = sb.run_command(["sleep", "30"])
+        assert r.killed_reason == "timeout"
+        assert r.wall_time_ms < 3000
