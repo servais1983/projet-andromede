@@ -1,71 +1,23 @@
-flask==2.3.3
-pandas==2.1.1
-numpy<2.0.0
-plotly==5.17.0
-matplotlib==3.7.2
-requests==2.31.0
-jinja2==3.1.2
+# ── Core web ──────────────────────────────────────────────────────────────────
+flask==3.0.3
+gunicorn==22.0.0
+werkzeug==3.0.3
 
-# Intelligence Artificielle avec Phi-3 (versions compatibles)
-torch>=2.0.0,<2.2.0
-transformers>=4.35.0,<5.0.0
-tokenizers>=0.14.0,<1.0.0
-accelerate>=0.24.0,<1.0.0
-safetensors>=0.4.0,<1.0.0
+# ── Data ──────────────────────────────────────────────────────────────────────
+pandas==2.2.2
+numpy==1.26.4
 
-# Cryptographie et sécurité
-cryptography>=41.0.0
-pycryptodome>=3.19.0
+# ── Security & crypto ─────────────────────────────────────────────────────────
+cryptography==42.0.8
+python-dotenv==1.0.1
 
-# Monitoring et système
-psutil>=5.9.0
-docker>=6.1.0
+# ── Visualisation (rapports) ──────────────────────────────────────────────────
+plotly==5.22.0
+jinja2==3.1.4
 
-# Réseau et P2P
-netifaces>=0.11.0
+# ── Monitoring ────────────────────────────────────────────────────────────────
+psutil==5.9.8
 
-# Interface 3D et visualisation
-plotly>=5.17.0
-matplotlib>=3.7.2
-seaborn>=0.12.0
-
-# Audio et multimédia (pour Astra) - optionnel
-speechrecognition>=3.10.0
-pydub>=0.25.1
-gtts>=2.4.0
-
-# Traitement de données avancé
-scikit-learn>=1.3.0
-scipy>=1.11.0
-
-# Formatage et sérialisation
-pyyaml>=6.0.1
-toml>=0.10.2
-
-# Tests et développement
-pytest>=7.4.0
-pytest-mock>=3.11.0
-black>=23.0.0
-flake8>=6.0.0
-
-# Performance et optimisation
-numba>=0.58.0
-
-# Logging et monitoring
-rich>=13.0.0
-loguru>=0.7.0
-
-# Networking avancé - optionnel
-scapy>=2.5.0
-
-# Machine Learning complémentaire
-joblib>=1.3.0
-
-# Interface utilisateur
-rich>=13.0.0
-click>=8.1.0
-prompt-toolkit>=3.0.0
-
-# Développement et debugging
-ipython>=8.0.0
-jupyter>=1.0.0
+# ── Logging ───────────────────────────────────────────────────────────────────
+rich==13.7.1
+loguru==0.7.2

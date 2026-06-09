@@ -1,89 +1,54 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
+*.pyo
+*.pyd
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
 *.egg
+*.egg-info/
+dist/
+build/
+.eggs/
 
-# Virtual Environments
+# Virtual environments
+.venv/
 venv/
 env/
-ENV/
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-.project
-.pydevproject
-.settings/
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-
-# Project specific
-chain-data/
-models/
-results/
-samples/
+# Environment variables
 .env
-config/quantum_encryption.yaml
+.env.*
+!.env.example
 
-# Docker
-.docker/
-docker-compose.override.yml
+# Uploads & generated files
+/uploads/
+/reports/
+*.html
+!templates/*.html
 
-# Database
-*.sqlite3
-*.db
+# Large binary / generated assets
+starmap_*.html
+andromeda_chain_*.json
 
-# OS specific
-.DS_Store
-Thumbs.db
-
-# Test
+# Tests
+.pytest_cache/
 .coverage
 htmlcov/
-.pytest_cache/
+.mypy_cache/
 
-# Distribution / packaging
-*.tar.gz
-*.zip
-*.gz
-*.rar
+# IDEs
+.vscode/
+.idea/
+*.swp
 
-# Documentation
-docs/_build/
+# Docker volumes
+chain-data/
+postgres-data/
+redis-data/
+models/
+samples/
+results/
 
-# TensorFlow / PyTorch
-checkpoints/
-tensorboard/
-*.pt
-*.pth
-*.h5
-*.ckpt
-
-# Credentials (NEVER COMMIT THESE)
-*.pem
-*.key
-*.crt
-*_rsa
-*.p12
+# OS
+.DS_Store
+Thumbs.db

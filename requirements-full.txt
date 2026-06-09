@@ -1,0 +1,14 @@
+-r requirements.txt
+
+# ── IA avancée (GPU recommandé) ───────────────────────────────────────────────
+torch==2.3.1
+transformers==4.41.2
+tokenizers==0.19.1
+accelerate==0.30.1
+safetensors==0.4.3
+scikit-learn==1.5.0
+scipy==1.13.1
+
+# ── Audio (Astra vocal) ───────────────────────────────────────────────────────
+speechrecognition==3.10.4
+gtts==2.5.1

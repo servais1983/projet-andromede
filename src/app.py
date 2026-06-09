@@ -1,27 +1,36 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
-Projet Andromède - Interface Web pour le scanner CSV
-Ce script crée une interface web pour l'analyse des fichiers CSV.
+Projet Andromède - Interface Web (production-ready)
 """
 
 import os
 import sys
 import tempfile
 import json
+import time
+import logging
 from pathlib import Path
-from flask import Flask, request, render_template, send_file, redirect, url_for, flash, jsonify
+from datetime import datetime
+from functools import wraps
+
+from flask import Flask, request, jsonify, render_template, send_file
 from werkzeug.utils import secure_filename
 import pandas as pd
-from datetime import datetime
-import time
 
-# Ajout du répertoire parent au path pour pouvoir importer main.py
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# ── Path setup ──────────────────────────────────────────────────────────────
+ROOT_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT_DIR))
 from src.main import CSVScanner
 
-# Import des modules IA
+# ── Logging ──────────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+# ── Optional AI modules ───────────────────────────────────────────────────────
 try:
     from core.ai.astra_assistant import AstraAssistant
     from core.ai.orion_core import OrionCore
@@ -29,298 +38,231 @@ try:
     AI_MODULES_AVAILABLE = True
 except ImportError:
     AI_MODULES_AVAILABLE = False
+    logger.info("AI modules unavailable — running in basic mode")
 
-app = Flask(__name__, 
-            template_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'templates'),
-            static_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'static'))
+# ── App factory ───────────────────────────────────────────────────────────────
+def create_app() -> Flask:
+    app = Flask(
+        __name__,
+        template_folder=str(ROOT_DIR / "templates"),
+        static_folder=str(ROOT_DIR / "static"),
+    )
 
-# Configuration
-app.config['UPLOAD_FOLDER'] = os.path.join(tempfile.gettempdir(), 'andromede_uploads')
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max
-app.secret_key = 'andromede_secret_key_2025'
+    # Configuration (env vars with safe defaults for dev)
+    app.config.update(
+        SECRET_KEY=os.environ.get("SECRET_KEY") or _require_secret(),
+        UPLOAD_FOLDER=os.environ.get("UPLOAD_FOLDER", tempfile.mkdtemp(prefix="andromede_")),
+        MAX_CONTENT_LENGTH=int(os.environ.get("MAX_UPLOAD_MB", 16)) * 1024 * 1024,
+        ENV=os.environ.get("FLASK_ENV", "production"),
+        DEBUG=os.environ.get("FLASK_DEBUG", "false").lower() == "true",
+    )
 
-# Création du dossier d'upload s'il n'existe pas
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-# Initialisation des modules IA
-astra_assistant = None
-orion_core = None
-starmap_visualizer = None
-
-if AI_MODULES_AVAILABLE:
-    try:
-        astra_assistant = AstraAssistant()
-        orion_core = OrionCore()
-        starmap_visualizer = StarMapVisualizer()
-        print("Modules IA initialises pour l'interface web")
-    except Exception as e:
-        print(f"Erreur initialisation IA web: {e}")
-
-def allowed_file(filename):
-    """Vérifie si le fichier est autorisé"""
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'csv'
-
-@app.route('/')
-def index():
-    """Page d'accueil avec interface de téléchargement"""
-    return render_template('index.html', 
-                         astra_available=astra_assistant is not None,
-                         ai_modules_status=get_ai_modules_status())
-
-@app.route('/chat')
-def chat():
-    """Interface de chat avec l'assistant Astra"""
-    return render_template('chat.html', 
-                         astra_available=astra_assistant is not None,
-                         project_name="Projet Andromède")
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    """API pour télécharger et analyser un fichier CSV"""
-    try:
-        # Vérifier qu'un fichier a été téléchargé
-        if 'file' not in request.files:
-            return jsonify({
-                'success': False,
-                'error': 'Aucun fichier téléchargé'
-            }), 400
-        
-        file = request.files['file']
-        
-        if file.filename == '':
-            return jsonify({
-                'success': False,
-                'error': 'Aucun fichier sélectionné'
-            }), 400
-        
-        if not allowed_file(file.filename):
-            return jsonify({
-                'success': False,
-                'error': 'Type de fichier non autorisé. Seuls les fichiers CSV sont acceptés.'
-            }), 400
-        
-        # Sauvegarder le fichier
-        filename = secure_filename(file.filename)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{timestamp}_{filename}"
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        
-        # Analyser le fichier
-        start_time = time.time()
-        scanner = CSVScanner()
-        results = scanner.scan_file(file_path)
-        
-        # Analyse IA supplémentaire si disponible
-        ai_insights = []
-        if orion_core and results.get('results'):
-            for result in results['results'][:5]:  # Limiter à 5 pour éviter la surcharge
-                if result.get('match'):
-                    try:
-                        ai_analysis = orion_core.analyze_threat(result['match'])
-                        ai_insights.append({
-                            'threat': result['match'],
-                            'ai_analysis': ai_analysis
-                        })
-                    except Exception as e:
-                        print(f"Erreur analyse IA: {e}")
-        
-        # Générer le rapport HTML
-        try:
-            html_report_path = scanner.generate_html_report(results)
-            report_url = f"/report/{os.path.basename(html_report_path)}"
-        except Exception as e:
-            print(f"Erreur génération rapport: {e}")
-            html_report_path = None
-            report_url = None
-        
-        # Calcul du temps de traitement
-        processing_time = time.time() - start_time
-        
-        # Préparer la réponse
-        response_data = {
-            'success': True,
-            'filename': file.filename,
-            'threats_detected': len(results.get('results', [])),
-            'risk_score': results.get('total_score', 0),
-            'risk_level': results.get('risk_level', 'Inconnu'),
-            'processing_time': round(processing_time, 2),
-            'report_url': report_url,
-            'ai_insights': ai_insights,
-            'summary': {
-                'total_rows_analyzed': results.get('rows_analyzed', 0),
-                'threats_by_severity': categorize_threats_by_severity(results.get('results', [])),
-                'top_threats': get_top_threats(results.get('results', []))
-            }
-        }
-        
-        # Nettoyage du fichier temporaire
-        try:
-            os.remove(file_path)
-        except:
-            pass
-        
-        return jsonify(response_data)
-        
-    except Exception as e:
-        print(f"Erreur lors du traitement: {e}")
-        return jsonify({
-            'success': False,
-            'error': f'Erreur lors de l\'analyse: {str(e)}'
-        }), 500
-
-@app.route('/ai-analysis', methods=['POST'])
-def ai_analysis():
-    """API pour analyse IA directe"""
-    if not astra_assistant:
-        return jsonify({
-            'success': False,
-            'error': 'Assistant IA non disponible'
-        }), 503
-    
-    try:
-        data = request.get_json()
-        message = data.get('message', '').strip()
-        session_id = data.get('session_id', 'web_default')
-        
-        if not message:
-            return jsonify({
-                'success': False,
-                'error': 'Message vide'
-            }), 400
-        
-        # Conversation avec Astra
-        response = astra_assistant.chat(message, session_id)
-        
-        return jsonify({
-            'success': True,
-            'response': response,
-            'session_id': session_id,
-            'timestamp': datetime.now().isoformat()
-        })
-        
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': f'Erreur IA: {str(e)}'
-        }), 500
-
-@app.route('/report/<filename>')
-def serve_report(filename):
-    """Servir les rapports HTML générés"""
-    try:
-        # Chercher le fichier dans le répertoire de travail
-        report_path = os.path.join(os.getcwd(), filename)
-        if os.path.exists(report_path):
-            return send_file(report_path, as_attachment=False)
-        
-        # Chercher dans le dossier temporaire
-        temp_report_path = os.path.join(tempfile.gettempdir(), filename)
-        if os.path.exists(temp_report_path):
-            return send_file(temp_report_path, as_attachment=False)
-        
-        return "Rapport non trouvé", 404
-        
-    except Exception as e:
-        return f"Erreur lors du chargement du rapport: {e}", 500
-
-@app.route('/status')
-def system_status():
-    """API pour obtenir le statut du système"""
-    status = {
-        'system': 'operational',
-        'ai_modules': get_ai_modules_status(),
-        'scanner': 'available',
-        'timestamp': datetime.now().isoformat()
-    }
-    
-    return jsonify(status)
-
-def get_ai_modules_status():
-    """Obtient le statut des modules IA"""
-    status = {}
-    
-    if astra_assistant:
-        try:
-            status['astra'] = astra_assistant.get_stats()
-        except:
-            status['astra'] = {'status': 'error'}
-    else:
-        status['astra'] = {'status': 'unavailable'}
-    
-    if orion_core:
-        try:
-            status['orion'] = orion_core.get_status()
-        except:
-            status['orion'] = {'status': 'error'}
-    else:
-        status['orion'] = {'status': 'unavailable'}
-    
-    if starmap_visualizer:
-        status['starmap'] = {'status': 'available'}
-    else:
-        status['starmap'] = {'status': 'unavailable'}
-    
-    return status
-
-def categorize_threats_by_severity(threats):
-    """Catégorise les menaces par niveau de sévérité"""
-    categories = {'critical': 0, 'high': 0, 'medium': 0, 'low': 0, 'info': 0}
-    
-    for threat in threats:
-        severity = threat.get('severity', 'info').lower()
-        if severity in categories:
-            categories[severity] += 1
-        else:
-            categories['info'] += 1
-    
-    return categories
-
-def get_top_threats(threats):
-    """Obtient les principales menaces détectées"""
-    # Trier par score décroissant
-    sorted_threats = sorted(threats, key=lambda x: x.get('score', 0), reverse=True)
-    
-    # Retourner les 5 principales
-    top_threats = []
-    for threat in sorted_threats[:5]:
-        top_threats.append({
-            'name': threat.get('rule_name', 'Menace inconnue'),
-            'description': threat.get('description', ''),
-            'severity': threat.get('severity', 'info'),
-            'score': threat.get('score', 0),
-            'location': threat.get('location', '')
-        })
-    
-    return top_threats
-
-@app.errorhandler(413)
-def too_large(e):
-    """Gestionnaire d'erreur pour fichiers trop volumineux"""
-    return jsonify({
-        'success': False,
-        'error': 'Fichier trop volumineux. Taille maximale autorisée: 16 MB'
-    }), 413
-
-@app.errorhandler(500)
-def internal_error(e):
-    """Gestionnaire d'erreur interne"""
-    return jsonify({
-        'success': False,
-        'error': 'Erreur interne du serveur'
-    }), 500
-
-if __name__ == '__main__':
-    print("Demarrage de l'interface web Andromede...")
-    print(f"Acces: http://localhost:5625")
-    
+    # ── AI init ───────────────────────────────────────────────────────────────
+    astra = orion = starmap = None
     if AI_MODULES_AVAILABLE:
-        print("Modules IA disponibles pour l'interface")
-    else:
-        print("Mode degrade - fonctionnalites de base disponibles")
-    
-    try:
-        app.run(host='127.0.0.1', port=5625, debug=False, threaded=True)
-    except Exception as e:
-        print(f"Erreur demarrage serveur: {e}")
-        print("   Verifiez que le port 5625 n'est pas deja utilise")
+        try:
+            astra = AstraAssistant()
+            orion = OrionCore()
+            starmap = StarMapVisualizer()
+            logger.info("AI modules initialised")
+        except Exception as exc:
+            logger.warning("AI init failed: %s", exc)
+
+    # ── Simple in-memory rate limiter ─────────────────────────────────────────
+    _rate_store: dict = {}
+
+    def rate_limit(max_per_minute: int = 30):
+        def decorator(fn):
+            @wraps(fn)
+            def wrapper(*args, **kwargs):
+                ip = request.remote_addr or "unknown"
+                now = time.time()
+                window = _rate_store.setdefault(ip, [])
+                # purge old entries
+                _rate_store[ip] = [t for t in window if now - t < 60]
+                if len(_rate_store[ip]) >= max_per_minute:
+                    return jsonify(error="Too many requests"), 429
+                _rate_store[ip].append(now)
+                return fn(*args, **kwargs)
+            return wrapper
+        return decorator
+
+    # ── Helpers ───────────────────────────────────────────────────────────────
+    def allowed_file(filename: str) -> bool:
+        return "." in filename and filename.rsplit(".", 1)[1].lower() == "csv"
+
+    def _ai_status():
+        return {
+            "astra": astra.get_stats() if astra else {"status": "unavailable"},
+            "orion": orion.get_status() if orion else {"status": "unavailable"},
+            "starmap": {"status": "available" if starmap else "unavailable"},
+        }
+
+    def _categorise(threats):
+        cats = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
+        for t in threats:
+            cats[t.get("severity", "info").lower()] = cats.get(t.get("severity", "info").lower(), 0) + 1
+        return cats
+
+    def _top_threats(threats, n=5):
+        return [
+            {
+                "name": t.get("rule_name", "Unknown"),
+                "description": t.get("description", ""),
+                "severity": t.get("severity", "info"),
+                "score": t.get("score", 0),
+                "location": t.get("location", ""),
+            }
+            for t in sorted(threats, key=lambda x: x.get("score", 0), reverse=True)[:n]
+        ]
+
+    # ── Routes ────────────────────────────────────────────────────────────────
+    @app.get("/")
+    def index():
+        return render_template("index.html", astra_available=astra is not None,
+                               ai_modules_status=_ai_status())
+
+    @app.get("/chat")
+    def chat():
+        return render_template("chat.html", astra_available=astra is not None,
+                               project_name="Projet Andromède")
+
+    @app.get("/healthz")
+    def health():
+        """Kubernetes / load-balancer health check."""
+        return jsonify(status="ok", timestamp=datetime.utcnow().isoformat()), 200
+
+    @app.get("/status")
+    def system_status():
+        return jsonify(system="operational", ai_modules=_ai_status(),
+                       scanner="available", timestamp=datetime.utcnow().isoformat())
+
+    @app.post("/upload")
+    @rate_limit(max_per_minute=20)
+    def upload_file():
+        if "file" not in request.files:
+            return jsonify(success=False, error="No file part"), 400
+        f = request.files["file"]
+        if not f.filename:
+            return jsonify(success=False, error="No file selected"), 400
+        if not allowed_file(f.filename):
+            return jsonify(success=False, error="Only CSV files are accepted"), 400
+
+        filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{secure_filename(f.filename)}"
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+        f.save(file_path)
+
+        try:
+            t0 = time.time()
+            scanner = CSVScanner()
+            results = scanner.scan_file(file_path)
+
+            # Optional AI enrichment (first 5 threats only)
+            ai_insights = []
+            if orion and results.get("results"):
+                for r in results["results"][:5]:
+                    if r.get("match"):
+                        try:
+                            ai_insights.append({
+                                "threat": r["match"],
+                                "ai_analysis": orion.analyze_threat(r["match"]),
+                            })
+                        except Exception:
+                            pass
+
+            # HTML report
+            report_url = None
+            try:
+                rp = scanner.generate_html_report(results)
+                report_url = f"/report/{Path(rp).name}"
+            except Exception as exc:
+                logger.warning("Report generation failed: %s", exc)
+
+            return jsonify(
+                success=True,
+                filename=f.filename,
+                threats_detected=len(results.get("results", [])),
+                risk_score=results.get("total_score", 0),
+                risk_level=results.get("risk_level", "Unknown"),
+                processing_time=round(time.time() - t0, 2),
+                report_url=report_url,
+                ai_insights=ai_insights,
+                summary={
+                    "total_rows_analyzed": results.get("rows_analyzed", 0),
+                    "threats_by_severity": _categorise(results.get("results", [])),
+                    "top_threats": _top_threats(results.get("results", [])),
+                },
+            )
+        finally:
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
+
+    @app.post("/ai-analysis")
+    @rate_limit(max_per_minute=30)
+    def ai_analysis():
+        if not astra:
+            return jsonify(success=False, error="AI assistant not available"), 503
+        data = request.get_json(silent=True) or {}
+        message = (data.get("message") or "").strip()
+        if not message:
+            return jsonify(success=False, error="Empty message"), 400
+        try:
+            response = astra.chat(message, data.get("session_id", "web_default"))
+            return jsonify(success=True, response=response,
+                           session_id=data.get("session_id", "web_default"),
+                           timestamp=datetime.utcnow().isoformat())
+        except Exception as exc:
+            logger.error("AI error: %s", exc)
+            return jsonify(success=False, error="AI processing error"), 500
+
+    @app.get("/report/<path:filename>")
+    def serve_report(filename):
+        # Security: restrict to basename, no path traversal
+        safe = Path(filename).name
+        for search_dir in [Path.cwd(), Path(tempfile.gettempdir())]:
+            candidate = search_dir / safe
+            if candidate.exists():
+                return send_file(str(candidate), as_attachment=False)
+        return jsonify(error="Report not found"), 404
+
+    # ── Error handlers ────────────────────────────────────────────────────────
+    @app.errorhandler(413)
+    def too_large(_e):
+        return jsonify(success=False,
+                       error=f"File too large. Max: {app.config['MAX_CONTENT_LENGTH']//1024//1024} MB"), 413
+
+    @app.errorhandler(404)
+    def not_found(_e):
+        return jsonify(success=False, error="Not found"), 404
+
+    @app.errorhandler(500)
+    def internal(_e):
+        logger.exception("Internal server error")
+        return jsonify(success=False, error="Internal server error"), 500
+
+    return app
+
+
+def _require_secret() -> str:
+    """Warn loudly in dev if SECRET_KEY is not set; refuse to start in production."""
+    env = os.environ.get("FLASK_ENV", "production")
+    if env == "production":
+        raise RuntimeError(
+            "SECRET_KEY environment variable must be set in production. "
+            "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
+        )
+    logger.warning("SECRET_KEY not set — using insecure dev default")
+    return "dev-insecure-key-do-not-use-in-production"
+
+
+# ── Entrypoint (dev only) ─────────────────────────────────────────────────────
+app = create_app()
+
+if __name__ == "__main__":
+    logger.info("Starting Andromède dev server on http://localhost:5625")
+    logger.warning("Use Gunicorn for production: gunicorn 'src.app:app'")
+    app.run(host="127.0.0.1", port=5625, debug=app.config["DEBUG"])
