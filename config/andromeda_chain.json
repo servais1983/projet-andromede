@@ -1,0 +1,75 @@
+[
+  {
+    "index": 0,
+    "timestamp": "2026-06-09T11:29:04.424912",
+    "signatures": [],
+    "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "merkle_root": "2e1cfa82b035c26cbbbdae632cea070514eb8b773f616aaeaf668e2f0be8f10d",
+    "nonce": 0,
+    "difficulty": 3,
+    "hash": "01c65b3a832488a8666ed2227d2b998ef30f35fa8dfdc71364e9906b7f722a2a"
+  },
+  {
+    "index": 1,
+    "timestamp": "2026-06-09T11:31:05.442557",
+    "signatures": [
+      {
+        "sig_id": "bdd33a24f6c890e5",
+        "threat_type": "xss",
+        "sha256_hash": "bdd33a24f6c890e5364dfc500bf796f20eb3afe7b032109a8986587cca2c9957",
+        "pattern_hash": "414f727c13811bb5ff46ee4d2a5d72b6f77bcda1c6ed2187d5caa845681941fe",
+        "severity": "high",
+        "confidence": 0.95,
+        "source_node": "b5d6ea55eb398c12",
+        "timestamp": "2026-06-09T11:31:05.442456"
+      }
+    ],
+    "previous_hash": "01c65b3a832488a8666ed2227d2b998ef30f35fa8dfdc71364e9906b7f722a2a",
+    "merkle_root": "9a3ab21c3c11beb72f763e4c0c65453b6cc6033e21238e645ca2dd4c90bb96bd",
+    "nonce": 3173,
+    "difficulty": 3,
+    "hash": "00085381a7e8355b169ffea43ff74e8366652a506567ee478f68f4c53f84d1d5"
+  },
+  {
+    "index": 2,
+    "timestamp": "2026-06-09T11:32:04.993542",
+    "signatures": [
+      {
+        "sig_id": "bdd33a24f6c890e5",
+        "threat_type": "xss",
+        "sha256_hash": "bdd33a24f6c890e5364dfc500bf796f20eb3afe7b032109a8986587cca2c9957",
+        "pattern_hash": "414f727c13811bb5ff46ee4d2a5d72b6f77bcda1c6ed2187d5caa845681941fe",
+        "severity": "high",
+        "confidence": 0.95,
+        "source_node": "c789950caf3c2e35",
+        "timestamp": "2026-06-09T11:32:04.993423"
+      }
+    ],
+    "previous_hash": "00085381a7e8355b169ffea43ff74e8366652a506567ee478f68f4c53f84d1d5",
+    "merkle_root": "f1c419acbc56a4f7ce3ca0dff137ed5cb940b123c410e206d6c6f16a2eacd853",
+    "nonce": 2054,
+    "difficulty": 3,
+    "hash": "000986d870128d5c6865d85e7fa003537e1fcbd76873054603f21aed4ed8f834"
+  },
+  {
+    "index": 3,
+    "timestamp": "2026-06-09T11:32:22.645828",
+    "signatures": [
+      {
+        "sig_id": "bdd33a24f6c890e5",
+        "threat_type": "xss",
+        "sha256_hash": "bdd33a24f6c890e5364dfc500bf796f20eb3afe7b032109a8986587cca2c9957",
+        "pattern_hash": "414f727c13811bb5ff46ee4d2a5d72b6f77bcda1c6ed2187d5caa845681941fe",
+        "severity": "high",
+        "confidence": 0.95,
+        "source_node": "4ac7ac0d0722a8de",
+        "timestamp": "2026-06-09T11:32:22.645537"
+      }
+    ],
+    "previous_hash": "000986d870128d5c6865d85e7fa003537e1fcbd76873054603f21aed4ed8f834",
+    "merkle_root": "52a342d27345e7d90a036bfd336f9f462abf26e46ff6d251e637664f31d951ac",
+    "nonce": 1551,
+    "difficulty": 3,
+    "hash": "0005fd89853594261a5488646640592d814068b752a1d189c96cd21a26a1bdd6"
+  }
+]

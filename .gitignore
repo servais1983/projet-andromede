@@ -52,3 +52,5 @@ results/
 # OS
 .DS_Store
 Thumbs.db
+real_malicious_data.csv
+real_threat_test.csv

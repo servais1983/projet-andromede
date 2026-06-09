@@ -40,6 +40,24 @@ except ImportError:
     AI_MODULES_AVAILABLE = False
     logger.info("AI modules unavailable — running in basic mode")
 
+
+# ── Real security modules ─────────────────────────────────────────────────────
+try:
+    from core.quantum.quantum_shield import QuantumShield
+    from core.sandbox.neural_sandbox import NeuralSandbox
+    from core.nebula.nebula_shield import NebulaShield
+    from core.blockchain.andromeda_chain import AndromedaChain
+    _quantum = QuantumShield()
+    _sandbox = NeuralSandbox()
+    _nebula  = NebulaShield()
+    _chain   = AndromedaChain()
+    SECURITY_MODULES_AVAILABLE = True
+    logger.info("Security modules (quantum/sandbox/nebula/blockchain) initialisés")
+except Exception as _sec_err:
+    SECURITY_MODULES_AVAILABLE = False
+    _quantum = _sandbox = _nebula = _chain = None
+    logger.warning("Security modules unavailable: %s", _sec_err)
+
 # ── App factory ───────────────────────────────────────────────────────────────
 def create_app() -> Flask:
     app = Flask(
@@ -228,6 +246,125 @@ def create_app() -> Flask:
             if candidate.exists():
                 return send_file(str(candidate), as_attachment=False)
         return jsonify(error="Report not found"), 404
+
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # Nouvelles routes — modules de sécurité réels
+    # ══════════════════════════════════════════════════════════════════════════
+
+    @app.get("/api/quantum/status")
+    def quantum_status():
+        if not _quantum:
+            return jsonify(error="Quantum Shield non disponible"), 503
+        return jsonify(_quantum.get_status())
+
+    @app.post("/api/quantum/encrypt")
+    @rate_limit(max_per_minute=20)
+    def quantum_encrypt():
+        if not _quantum:
+            return jsonify(error="Quantum Shield non disponible"), 503
+        data = request.get_json(silent=True) or {}
+        plaintext = data.get("data", "")
+        if not plaintext:
+            return jsonify(error="Champ 'data' requis"), 400
+        payload = _quantum.encrypt(plaintext.encode())
+        return jsonify(
+            ciphertext_hex=payload.ciphertext.hex(),
+            nonce_hex=payload.nonce.hex(),
+            algorithm=payload.algorithm,
+            timestamp=payload.timestamp,
+        )
+
+    @app.post("/api/quantum/sign")
+    @rate_limit(max_per_minute=20)
+    def quantum_sign():
+        if not _quantum:
+            return jsonify(error="Quantum Shield non disponible"), 503
+        data = request.get_json(silent=True) or {}
+        payload = data.get("data", "")
+        if not payload:
+            return jsonify(error="Champ 'data' requis"), 400
+        result = _quantum.sign(payload.encode())
+        return jsonify(**result)
+
+    @app.get("/api/blockchain/status")
+    def blockchain_status():
+        if not _chain:
+            return jsonify(error="Blockchain non disponible"), 503
+        return jsonify(_chain.get_status())
+
+    @app.get("/api/blockchain/chain")
+    def blockchain_chain():
+        if not _chain:
+            return jsonify(error="Blockchain non disponible"), 503
+        blocks = _chain.get_chain()
+        return jsonify(blocks=[b.__dict__ for b in blocks], length=len(blocks))
+
+    @app.post("/api/blockchain/add")
+    @rate_limit(max_per_minute=10)
+    def blockchain_add():
+        if not _chain:
+            return jsonify(error="Blockchain non disponible"), 503
+        data = request.get_json(silent=True) or {}
+        threat_data = data.get("threat_data")
+        if not threat_data:
+            return jsonify(error="Champ 'threat_data' requis"), 400
+        block = _chain.add_threat(threat_data)
+        return jsonify(
+            success=True,
+            block_hash=block.hash,
+            index=block.index,
+            merkle_root=block.merkle_root,
+        ), 201
+
+    @app.get("/api/nebula/status")
+    def nebula_status():
+        if not _nebula:
+            return jsonify(error="Nebula Shield non disponible"), 503
+        return jsonify(_nebula.get_status())
+
+    @app.get("/api/nebula/snapshot")
+    @rate_limit(max_per_minute=10)
+    def nebula_snapshot():
+        if not _nebula:
+            return jsonify(error="Nebula Shield non disponible"), 503
+        snap = _nebula.system_snapshot()
+        procs = _nebula.scan_processes()
+        nets = _nebula.scan_network()
+        suspicious_procs = [p.__dict__ for p in procs if p.suspicious]
+        suspicious_nets  = [c.__dict__ for c in nets  if c.suspicious]
+        return jsonify(
+            system=snap,
+            total_processes=len(procs),
+            total_connections=len(nets),
+            suspicious_processes=suspicious_procs,
+            suspicious_connections=suspicious_nets,
+            alerts=_nebula.get_alerts(10),
+        )
+
+    @app.get("/api/sandbox/status")
+    def sandbox_status():
+        if not _sandbox:
+            return jsonify(error="Neural Sandbox non disponible"), 503
+        return jsonify(_sandbox.get_status())
+
+    @app.get("/api/status/all")
+    def status_all():
+        """Vue consolidée de tous les modules de sécurité."""
+        modules: dict = {}
+        if _quantum:
+            modules["quantum"] = _quantum.get_status()
+        if _chain:
+            modules["blockchain"] = _chain.get_status()
+        if _nebula:
+            modules["nebula"] = _nebula.get_status()
+        if _sandbox:
+            modules["sandbox"] = _sandbox.get_status()
+        return jsonify(
+            status="operational",
+            timestamp=datetime.utcnow().isoformat(),
+            modules=modules,
+        )
 
     # ── Error handlers ────────────────────────────────────────────────────────
     @app.errorhandler(413)
